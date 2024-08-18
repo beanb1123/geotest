@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real-Time Geolocation Tracking</title>
+</head>
+<body>
+  <h1>Your Current Location:</h1>
+  <div id="location-info">
+    <p>Latitude: <span id="latitude"></span></p>
+    <p>Longitude: <span id="longitude"></span></p>
+  </div>
+
+  <script>
+    // Check for browser support for geolocation
+    if (navigator.geolocation) {
+      // Get user's current position
+      navigator.geolocation.getCurrentPosition(
+        // Success callback
+        (position) => {
+          // Get the latitude and longitude
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          // Update UI elements with initial location
+          document.getElementById("latitude").textContent = latitude;
+          document.getElementById("longitude").textContent = longitude;
+
+          // Start tracking location updates
+          const watchId = navigator.geolocation.watchPosition(
+            // Success callback for updates
+            (position) => {
+              const updatedLatitude = position.coords.latitude;
+              const updatedLongitude = position.coords.longitude;
+
+              // Update UI elements with updated location
+              document.getElementById("latitude").textContent = updatedLatitude;
+              document.getElementById("longitude").textContent = updatedLongitude;
+            },
+            // Error callback
+            (error) => {
+              console.error("Error getting location:", error);
+            },
+            // Optional options for watchPosition (e.g., accuracy, frequency)
+            // { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+          );
+        },
+        // Error callback
+        (error) => {
+          console.error("Error getting location:", error);
+        },
+        // Optional options for getCurrentPosition (e.g., accuracy)
+        // { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+    } else {
+      // Handle cases where geolocation is not supported
+      console.error("Geolocation is not supported by this browser.");
+    }
+  </script>
+</body>
+</html>
